@@ -13,3 +13,4 @@ Backlog
 - [ ] Report on error and bubble up details
 - [ ] Move the local file path to a remote SFTP path
 - [ ] Unit Testing
+- [ ] Add Success and failure totals on batch (Threadsafe updates)
