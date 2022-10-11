@@ -14,3 +14,4 @@ Backlog
 - [ ] Move the local file path to a remote SFTP path
 - [ ] Unit Testing
 - [ ] Add Success and failure totals on batch (Threadsafe updates)
+- [ ] Add last updated to account db, when more than 1 month ad an SCD placeholder
