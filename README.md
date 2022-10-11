@@ -1,8 +1,7 @@
 # Python SCD ETL Spike
 A python example of reading and processing excel files into SCD table
 
-![image](https://user-images.githubusercontent.com/2478826/195192854-d4062d33-51a4-4af0-9716-579ec66442f8.png)
-
+![image](https://user-images.githubusercontent.com/2478826/195193457-017be171-4451-40d8-84de-b85df3678fc7.png)
 
 Backlog
 - [ ] Batch read standard excel template
