@@ -12,3 +12,4 @@ Backlog
 - [ ] Archive file when completed
 - [ ] Report on error and bubble up details
 - [ ] Move the local file path to a remote SFTP path
+- [ ] Unit Testing
