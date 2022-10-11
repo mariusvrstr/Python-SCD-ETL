@@ -1,0 +1,41 @@
+@startuml ERD Design
+
+class StageRecord {
+    +id
+    effective_date
+    insert_date
+    external_refrence
+    company_name
+    amount
+    status
+    -batch_id
+}
+
+class Batch {
+    +id
+    client_account
+    start_date
+    end_date
+    batch_status
+}
+
+class MasterRecord {
+    +id
+    external_reference
+    company_name
+    amount
+    status
+    from_date
+    to_date
+    -client_account_id
+}
+
+class ClientAccount {
+    +id
+    account_number
+}
+
+StageRecord }-- Batch
+MasterRecord }-- ClientAccount
+
+@enduml

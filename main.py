@@ -1,11 +1,14 @@
 import os
-import pandas as pd
+
+from src.application.services.file_processing_service import FileProcessingService
 
 
-directory = os.getcwd()
+def main():
+    directory = os.getcwd()
+    file_path = f'{directory}/etl/sample_files/ExampleFile.xlsx'
 
-file_path = f'{directory}/etl/sample_files/ExampleFile.xlsx'
+    service = FileProcessingService()
+    service.process_file(file_path)
 
-data = pd.read_excel (file_path) 
-df = pd.DataFrame(data, columns= ['External Reference'])
-print (df)
+
+main()
