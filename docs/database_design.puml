@@ -12,11 +12,13 @@ class StageRecord {
 }
 
 class Batch {
-    +id
-    client_account
+    +id    
     start_date
     end_date
+    client_account
+    file_hash
     batch_status
+    deleted
 }
 
 class MasterRecord {
