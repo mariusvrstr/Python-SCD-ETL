@@ -16,6 +16,8 @@ class Batch {
     client_account
     start_date
     end_date
+    success_count
+    failure_count
     batch_status
 }
 
@@ -27,12 +29,14 @@ class MasterRecord {
     status
     from_date
     to_date
+    is_deleted
     -client_account_id
 }
 
 class ClientAccount {
     +id
     account_number
+    last_updated
 }
 
 StageRecord }-- Batch
