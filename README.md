@@ -23,6 +23,7 @@ Do Next
 - [ ] Before SCD batch processing run client cleanup (a) items that has missing submissions for client gets placeholder (b) items that was missing in previous submissions amounts are zero's
 
 Backlog
+- [ ] Keep transactions on item level and skip update if current batch reference <> current batch (Re-Run batch without re processing)
 - [ ] Block processing of files that was already processed
 - [ ] Process completed batches into SCD type 2 table
 - [ ] Archive file when completed
