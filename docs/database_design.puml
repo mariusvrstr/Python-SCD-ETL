@@ -32,6 +32,7 @@ class MasterRecord {
     is_deleted
     last_updated
     has_changes
+    batch_reference
     -client_account_id
 }
 
