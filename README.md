@@ -30,9 +30,10 @@ This is optional to view the [documentation](https://github.com/mariusvrstr/Pyth
 ### Completed
 - [X] Read excel into type accurate class
 - [X] Automate setup (requirements.txt)
+- [X] Add Data Access with SQLAlchemy & SQLLite
+- [X] Read excel data into a batched staging
 
 ### Do Nex
-- [ ] Add Data Access with SQLAlchemy & SQLLite
 - [ ] Add SCD Type 2 for MasterRecord insert latest
 - [ ] Soft delete a previously inserted batch entries (Re link SCD chain)
 - [ ] Update existing SCD chain with historic data (a) Replace placeholder (b) More granular
