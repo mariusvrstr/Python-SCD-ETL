@@ -30,6 +30,8 @@ class MasterRecord {
     from_date
     to_date
     is_deleted
+    last_updated
+    has_changes
     -client_account_id
 }
 
