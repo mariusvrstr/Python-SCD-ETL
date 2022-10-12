@@ -11,11 +11,13 @@ class StageRecord {
     -batch_id
 }
 
-class Batch {
+class StageBatch {
     +id
     client_account
     start_date
     end_date
+    file_hash
+    file_name
     success_count
     failure_count
     batch_status
@@ -29,8 +31,8 @@ class MasterRecord {
     status
     from_date
     to_date
-    is_deleted
     last_updated
+    is_deleted    
     has_changes
     batch_reference
     -client_account_id
