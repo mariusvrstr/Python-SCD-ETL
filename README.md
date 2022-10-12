@@ -1,17 +1,31 @@
 # Python SCD ETL Spike
 A python example of reading and processing excel files into SCD table
 
-![image](https://user-images.githubusercontent.com/2478826/195193457-017be171-4451-40d8-84de-b85df3678fc7.png)
+![image](https://user-images.githubusercontent.com/2478826/195299375-ce7858c0-0f7c-4612-9eda-1556847bef46.png)
 
-DOR
+## Setup
+
+## Python Project
+1. Run the "setup.ps1" powershell script to create local virtual environment and install dependancies
+
+## View PlantUML Documentation
+This is optional to view the [documentation](https://github.com/mariusvrstr/Python-SCD-ETL/tree/main/docs), not needed to run the solution.
+1. Install [Java Runtime](https://www.java.com/download/ie_manual.jsp)
+2. Install [Graphviz](https://graphviz.org/#what-is-graphviz)
+3. Install the [PlantUML VSCode Extention](https://marketplace.visualstudio.com/items?itemName=jebbs.plantuml)
+4. Open the *.puml file and press Alt+D to preview
+
+## Things to unpack
 - Is it necessary to batchbreading of file for large files?
 - Is there a need to customize the validity period e.g. 30 days?
 
-Completed
+## Backlog
+
+### Completed
 - [X] Read excel into type accurate class
 - [X] Automate setup (requirements.txt)
 
-Do Next
+### Do Nex
 - [ ] Add Data Access with SQLAlchemy & SQLLite
 - [ ] Add SCD Type 2 for MasterRecord insert latest
 - [ ] Soft delete a previously inserted batch entries (Re link SCD chain)
@@ -22,7 +36,7 @@ Do Next
 - [ ] Monitor (Asyncio) for batches that are ready and process them in seperate thread up to x
 - [ ] Before SCD batch processing run client cleanup (a) items that has missing submissions for client gets placeholder (b) items that was missing in previous submissions amounts are zero's
 
-Backlog
+### Backlog
 - [ ] Keep transactions on item level and skip update if current batch reference <> current batch (Re-Run batch without re processing)
 - [ ] Block processing of files that was already processed
 - [ ] Process completed batches into SCD type 2 table
