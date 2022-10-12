@@ -37,9 +37,10 @@ This is optional to view the [documentation](https://github.com/mariusvrstr/Pyth
 - [X] Archive file when completed
 - [X] Block processing of files that was already processed
 
-### Do Nex
+### Do Next
 - [ ] Add SCD Type 2 for MasterRecord insert latest
 - [ ] Soft delete a previously inserted batch entries (Re link SCD chain)
+- [ ] When new insert covers 80% of placeholder remove placeholder and adjust
 - [ ] Update existing SCD chain with historic data (a) Replace placeholder (b) More granular
 - [ ] Fail if start date already exist (First remove can't have duplicates)
 - [ ] Unit testing
@@ -53,4 +54,3 @@ This is optional to view the [documentation](https://github.com/mariusvrstr/Pyth
 - [ ] Report on error and bubble up details
 - [ ] Move the local file path to a remote SFTP path
 - [ ] Add Success and failure totals on batch (Threadsafe updates)
-
