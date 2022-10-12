@@ -12,14 +12,16 @@ A python example of reading and processing excel files into SCD table
 ## Python Project
 1. Run the "setup.ps1" powershell script to create local virtual environment and install dependancies
 
+## Execute
+1. Copy sample files from "../etl/sample_files/*.xlsx" into root "../etl/"
+2. Run main.py
+
 ## View PlantUML Documentation
 This is optional to view the [documentation](https://github.com/mariusvrstr/Python-SCD-ETL/tree/main/docs), not needed to run the solution.
 1. Install [Java Runtime](https://www.java.com/download/ie_manual.jsp)
 2. Install [Graphviz](https://graphviz.org/#what-is-graphviz)
 3. Install the [PlantUML VSCode Extention](https://marketplace.visualstudio.com/items?itemName=jebbs.plantuml)
 4. Open the *.puml file and press Alt+D to preview
-
-
 
 ## Things to unpack
 - Is it necessary to batchbreading of file for large files?
@@ -32,6 +34,7 @@ This is optional to view the [documentation](https://github.com/mariusvrstr/Pyth
 - [X] Automate setup (requirements.txt)
 - [X] Add Data Access with SQLAlchemy & SQLLite
 - [X] Read excel data into a batched staging
+- [X] Archive file when completed
 
 ### Do Nex
 - [ ] Add SCD Type 2 for MasterRecord insert latest
@@ -47,7 +50,6 @@ This is optional to view the [documentation](https://github.com/mariusvrstr/Pyth
 - [ ] Keep transactions on item level and skip update if current batch reference <> current batch (Re-Run batch without re processing)
 - [ ] Block processing of files that was already processed
 - [ ] Process completed batches into SCD type 2 table
-- [ ] Archive file when completed
 - [ ] Report on error and bubble up details
 - [ ] Move the local file path to a remote SFTP path
 - [ ] Add Success and failure totals on batch (Threadsafe updates)

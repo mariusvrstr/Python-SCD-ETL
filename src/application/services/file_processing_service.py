@@ -5,6 +5,7 @@ import os
 import hashlib
 
 from src.application.models.file_headings import FileHeadings
+from src.application.models.stage_batch import StageBatch
 from src.application.models.file_item import FileItem
 from src.data_access.database.stage_repository import StageRepository
 from src.application.models.batch_status import BatchStatus
@@ -39,7 +40,7 @@ class FileProcessingService():
             print(f"Oops! {ex.__class__} occurred. Details: {ex}") 
             return False
 
-    def process_file(self, file_path):
+    def process_file(self, file_path) -> StageBatch:
 
         try:
             data = pd.read_excel(file_path)
@@ -77,10 +78,11 @@ class FileProcessingService():
                 else:
                     failure_count += 1
 
-            batch = self.stage_repo.complete_batch(batch.id, success_count, failure_count, 0.2)          
+            batch = self.stage_repo.complete_batch(batch.id, success_count, failure_count, 0.2)
+            return batch       
            
         except Exception as ex:
-            print(f"Oops! {ex.__class__} occurred. Details: {ex}")  
+            # print(f"Oops! {ex.__class__} occurred. Details: {ex}")  
             raise # re-throw after writing error to screen
 
 
