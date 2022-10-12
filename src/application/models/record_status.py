@@ -1,7 +1,7 @@
 from enum import Enum
 
 # Column in the Excel File
-class Status(Enum):
+class RecordStatus(Enum):
     Undefined = 0
     Active = 1
     Inactive = 2

@@ -1,6 +1,5 @@
 from unicodedata import decimal
-from src.contracts.template.Status import Status
-from datetime import datetime
+from src.application.models.record_status import RecordStatus
 
 class FileItem():
     effective_date = None
@@ -24,7 +23,7 @@ class FileItem():
                 self.amount = float(amount)
 
             if (status is not None):
-                self.status = Status[status]
+                self.status = RecordStatus[status]
             
             self.effective_date = effective_date
             self.client_account = client_account

@@ -130,3 +130,7 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# Processing Excel Files
+/etl/archive/*.xlsx
+/etl/processing/*.xlsx
