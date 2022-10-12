@@ -5,6 +5,7 @@ A python example of reading and processing excel files into SCD table
 
 DOR
 - Is it necessary to batchbreading of file for large files?
+- Is there a need to customize the validity period e.g. 30 days?
 
 Completed
 - [X] Read excel into type accurate class
@@ -16,7 +17,7 @@ Do Next
 - [ ] Unit testing
 - [ ] Monitor (Asyncio) and process files in seperate threads up to X
 - [ ] Monitor (Asyncio) for batches that are ready and process them in seperate thread up to x
-- [ ] Before file SCD processing run client cleanup (a) items that has missing submissions for client gets placeholder (b) items that was missing in previous submissions amounts are zero's
+- [ ] Before SCD batch processing run client cleanup (a) items that has missing submissions for client gets placeholder (b) items that was missing in previous submissions amounts are zero's
 
 Backlog
 - [ ] Block processing of files that was already processed
