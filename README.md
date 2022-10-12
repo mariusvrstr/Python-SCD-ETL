@@ -35,6 +35,7 @@ This is optional to view the [documentation](https://github.com/mariusvrstr/Pyth
 - [X] Add Data Access with SQLAlchemy & SQLLite
 - [X] Read excel data into a batched staging
 - [X] Archive file when completed
+- [X] Block processing of files that was already processed
 
 ### Do Nex
 - [ ] Add SCD Type 2 for MasterRecord insert latest
@@ -48,7 +49,6 @@ This is optional to view the [documentation](https://github.com/mariusvrstr/Pyth
 
 ### Backlog
 - [ ] Keep transactions on item level and skip update if current batch reference <> current batch (Re-Run batch without re processing)
-- [ ] Block processing of files that was already processed
 - [ ] Process completed batches into SCD type 2 table
 - [ ] Report on error and bubble up details
 - [ ] Move the local file path to a remote SFTP path
