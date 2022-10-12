@@ -6,7 +6,7 @@ from src.data_access.database.common.database import Base
 from sqlalchemy.sql.schema import ForeignKey
 from sqlalchemy.sql.sqltypes import Integer, String, Float, DateTime
 from sqlalchemy.orm import relationship
-from sqlalchemy import Column
+from sqlalchemy import Column, UniqueConstraint
 from src.application.models.batch_status import BatchStatus
 
 class StageBatchEntity(Base):
@@ -20,7 +20,7 @@ class StageBatchEntity(Base):
     success_count = Column(Integer)
     failure_count = Column(Integer)
     batch_status = Column(String)
-
+    
     # Foreign Key - Many Side Opposed to One
     records = relationship('StageRecordEntity', back_populates='')
 
@@ -49,6 +49,8 @@ class StageRecordEntity(Base):
 
    # Foreign Key - One Side Oposed to Many
     batch_id = Column(Integer, ForeignKey('StageBatch.id'))
+
+    # UniqueConstraint("batch_id", "external_reference", name="unique_debtor_batch")
 
     def create(self, effective_date, external_reference, company_name, amount, status, batch_id, id = None):
         self.id = id
