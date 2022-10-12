@@ -5,7 +5,6 @@ from src.data_access.database.common.database import get_db_Session, engine
 from src.application.services.file_processing_service import FileProcessingService
 from src.application.models.batch_status import BatchStatus
 from src.data_access.database.models import database_models
-import shutil
 
 context = get_db_Session()
 file_service = FileProcessingService(context)
@@ -28,7 +27,7 @@ def main():
             os.rename(file, working_file_path)
             batch_summary = file_service.process_file(working_file_path)
 
-            if (batch_summary.batch_status == BatchStatus.Complete.value):
+            if (batch_summary.batch_status == BatchStatus.Ready.value):
                 # Archive file on success
                 os.rename(working_file_path, f'{root_folder}archive\\{new_filename}')                      
 

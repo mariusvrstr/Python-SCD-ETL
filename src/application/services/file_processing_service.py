@@ -55,7 +55,7 @@ class FileProcessingService():
             if (batch is None):
                 batch = self.stage_repo.add_stage_batch(client_account, filename, file_hash)
 
-            if (batch.batch_status == BatchStatus.Complete.value):
+            if (batch.batch_status != BatchStatus.Error and batch.batch_status != BatchStatus.InProgress): # Can re-process on error
                 raise ValueError(f'Cannot process [{filename}] file for [{batch.client_account}] account. It was already processed [{batch.end_date}]')
 
             success_count = 0

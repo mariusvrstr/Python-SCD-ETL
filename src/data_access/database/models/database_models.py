@@ -4,7 +4,7 @@ from tokenize import String
 from unicodedata import name
 from src.data_access.database.common.database import Base
 from sqlalchemy.sql.schema import ForeignKey
-from sqlalchemy.sql.sqltypes import Integer, String, Float, DateTime
+from sqlalchemy.sql.sqltypes import Integer, String, Float, DateTime, Boolean
 from sqlalchemy.orm import relationship
 from sqlalchemy import Column, UniqueConstraint
 from src.application.models.batch_status import BatchStatus
@@ -47,7 +47,7 @@ class StageRecordEntity(Base):
     amount = Column(Float)
     status = Column(String)
 
-   # Foreign Key - One Side Oposed to Many
+    # Foreign Key - One Side Oposed to Many
     batch_id = Column(Integer, ForeignKey('StageBatch.id'))
 
     # UniqueConstraint("batch_id", "external_reference", name="unique_debtor_batch")
@@ -64,3 +64,39 @@ class StageRecordEntity(Base):
 
         return self
 
+class MasterRecordEntity(Base):
+    __tablename__ = 'MasterRecord'
+    id = Column(Integer, primary_key=True, index=True)
+    external_reference = Column(String)
+    company_name = Column(String)
+    amount = Column(Float)
+    status = Column(String)
+
+    from_date = Column(DateTime)
+    to_date = Column(DateTime)
+    last_updated = Column(DateTime)
+    is_deleted = Column(Boolean)
+    has_changes = Column(Boolean)
+       
+    # Foreign Key - One Side Oposed to Many
+    batch_id = Column(Integer, ForeignKey('StageBatch.id'))
+    client_account_id = Column(Integer, ForeignKey('ClientAccount.id'))
+
+    def create(self, external_reference, company_name, amount, status, client_account_id, id = None):
+        self.id = id
+        self.external_reference = external_reference
+        self.company_name = company_name
+        self.amount = amount
+        self.status = status
+        self.client_account_id = client_account_id
+        self.is_deleted = False
+
+        return self
+
+class ClientAccountEntity(Base):
+    __tablename__ = 'ClientAccount'
+    id = Column(Integer, primary_key=True, index=True)
+    account_number = Column(String)
+    last_updated = Column(DateTime)
+
+    records = relationship('MasterRecordEntity', back_populates='')

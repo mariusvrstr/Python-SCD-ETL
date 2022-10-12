@@ -9,27 +9,15 @@ from sqlalchemy.sql import select
 
 class StageRepository(RepositoryBase):
 
-    def map_to_business(self, db_object: StageRecordEntity) -> StageRecord:
-        mapped = StageRecord().create(
-            db_object.effective_date, db_object.insert_date, db_object.external_reference, db_object.amount, db_object.status, db_object.id)
-        return mapped
-
-    def map_to_database(self, bus_object) -> StageRecordEntity:
-        raise ValueError('Map to database is not used')
-
-    def map_to_business_batch(self, db_object: StageBatchEntity) -> StageBatch:
-        mapped = StageBatch().create(db_object.client_account, db_object.start_date, db_object.end_date, db_object.file_hash, 
-            db_object.filename, db_object.success_count, db_object.failure_count,
-            db_object.batch_status, db_object.id)
-        return mapped
-
     def __init__(self, context) -> None:
         super().__init__(context, StageRecordEntity, StageRecord)
 
-    def get_stage_batch(self, client_account, file_hash):
+    def get_stage_batch(self, client_account, file_hash) -> StageBatch:
         batch = self.context.query(StageBatchEntity).filter(
-            StageBatchEntity.client_account == client_account and StageBatchEntity.file_hash == file_hash).first() # and StageBatchEntity.batch_status != BatchStatus.Deleted.value
-        return batch
+            StageBatchEntity.client_account == client_account and StageBatchEntity.file_hash == file_hash and StageBatchEntity.batch_status != BatchStatus.Deleted.value).first() 
+        
+        mapped = self.map_to_business_batch(batch)
+        return mapped
 
     def add_stage_batch(self, client_account, filename, file_hash):
         new_batch = StageBatchEntity().create(client_account, filename, file_hash)
@@ -53,7 +41,7 @@ class StageRepository(RepositoryBase):
             batch.batch_status = BatchStatus.Error.value
         else:
             batch.end_date = datetime.now()
-            batch.batch_status = BatchStatus.Complete.value
+            batch.batch_status = BatchStatus.Ready.value
 
         batch.success_count = success_count
         batch.failure_count = failure_count
@@ -61,4 +49,27 @@ class StageRepository(RepositoryBase):
         self.sync()
         return self.map_to_business_batch(batch)
 
+    '''
+    ========================================
+    Mappers TODO: Replace with a auto mapper
+    ========================================
+    '''
+    def map_to_business(self, db_object: StageRecordEntity) -> StageRecord:
+        if (db_object is None):
+            return None
 
+        mapped = StageRecord().create(
+            db_object.effective_date, db_object.insert_date, db_object.external_reference, db_object.amount, db_object.status, db_object.id)
+        return mapped
+
+    def map_to_database(self, bus_object) -> StageRecordEntity:
+        raise ValueError('Map to database is not used')
+
+    def map_to_business_batch(self, db_object: StageBatchEntity) -> StageBatch:
+        if (db_object is None):
+            return None
+            
+        mapped = StageBatch().create(db_object.client_account, db_object.start_date, db_object.end_date, db_object.file_hash, 
+            db_object.filename, db_object.success_count, db_object.failure_count,
+            db_object.batch_status, db_object.id)
+        return mapped

@@ -34,7 +34,7 @@ class MasterRecord {
     last_updated
     is_deleted    
     has_changes
-    batch_reference
+    -batch_id
     -client_account_id
 }
 
@@ -44,7 +44,8 @@ class ClientAccount {
     last_updated
 }
 
-StageRecord }-- Batch
+StageRecord }-- StageBatch
 MasterRecord }-- ClientAccount
+MasterRecord }-- StageBatch
 
 @enduml
