@@ -1,6 +1,10 @@
 # Python SCD ETL Spike
 A python example of reading and processing excel files into SCD table
 
+### Conceptual Architecture
+![image](https://user-images.githubusercontent.com/2478826/195299688-09855829-7808-4350-bc63-40f1a02c776d.png)
+
+### ERD Diagram
 ![image](https://user-images.githubusercontent.com/2478826/195299375-ce7858c0-0f7c-4612-9eda-1556847bef46.png)
 
 ## Setup
@@ -14,6 +18,8 @@ This is optional to view the [documentation](https://github.com/mariusvrstr/Pyth
 2. Install [Graphviz](https://graphviz.org/#what-is-graphviz)
 3. Install the [PlantUML VSCode Extention](https://marketplace.visualstudio.com/items?itemName=jebbs.plantuml)
 4. Open the *.puml file and press Alt+D to preview
+
+
 
 ## Things to unpack
 - Is it necessary to batchbreading of file for large files?
