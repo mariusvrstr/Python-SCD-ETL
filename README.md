@@ -13,7 +13,10 @@ Completed
 
 Do Next
 - [ ] Add Data Access with SQLAlchemy & SQLLite
-- [ ] Add SCD Type 2 for MasterRecord inserts
+- [ ] Add SCD Type 2 for MasterRecord insert latest
+- [ ] Soft delete a previously inserted batch entries (Re link SCD chain)
+- [ ] Update existing SCD chain with historic data (a) Replace placeholder (b) More granular
+- [ ] Fail if start date already exist (First remove can't have duplicates)
 - [ ] Unit testing
 - [ ] Monitor (Asyncio) and process files in seperate threads up to X
 - [ ] Monitor (Asyncio) for batches that are ready and process them in seperate thread up to x
