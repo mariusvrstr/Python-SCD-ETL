@@ -36,30 +36,33 @@ This is optional to view the [documentation](https://github.com/mariusvrstr/Pyth
 
 ## Backlog
 
-### Completed
-- [X] Read excel into type accurate class
+### General Backlog
 - [X] Automate setup (requirements.txt)
 - [X] Add Data Access with SQLAlchemy & SQLLite
-- [X] Read excel data into a batched staging
-- [X] Archive file when completed
-- [X] Block processing of files that was already processed
-
-### Do Next
-- [ ] Add SCD Type 2 for MasterRecord insert latest
-- [ ] Soft delete a previously inserted batch entries (Re link SCD chain)
-- [ ] When new insert covers 80% of placeholder remove placeholder and adjust
-- [ ] Update existing SCD chain with historic data (a) Replace placeholder (b) More granular
-- [ ] Fail if start date already exist (First remove can't have duplicates)
 - [ ] Unit testing with transaction rollback
 - [ ] Monitor (Asyncio) and process files in seperate threads up to X
 - [ ] Monitor (Asyncio) for batches that are ready and process them in seperate thread up to x
-- [ ] Before SCD batch processing run client cleanup (a) items that has missing submissions for client gets placeholder (b) items that was missing in previous submissions amounts are zero's
-- [ ] From (date) get me X instances every day/month
-- [ ] Check client account that the chain is healthy (a) instances are not longer than X from each other and that (b) there are no missing chains from the first to last entry
+- [ ] Move the local file path to a remote SFTP path (Run from a cloud service without access to local HDD)
 
-### Backlog
-- [ ] Keep transactions on item level and skip update if current batch reference <> current batch (Re-Run batch without re processing)
-- [ ] Process completed batches into SCD type 2 table
+## SCD Type 2 Backlog
+- [ ] Append new (latest) item to en of SCD chain 
+- [ ] Soft delete one/batch of existing records in the SCD chain
+- [ ] Insert new SCD record in between 2 existing entries
+- [ ] Before item level SCD run client cleanup (a) items that has missing submissions for client gets placeholder (b) items that was missing in previous submissions amounts are zero's
+- [ ] Replace existing placeholder record if new insert covers 80% or more of the placeholder duration
+
+## Resiliance and Error Backlog
+- [X] Minor errors should optionally be able to allow to proceed
+- [X] Block processing of files that was already processed
+- [ ] Must be able to continue processing of a file or batch if it was interupted without re-processing all entries (service was restarted while it was busy)
+- [ ] Must be able to re-run a batch that previously failed
+- [ ] From (date) get me X instances every day/month
 - [ ] Report on error and bubble up details
-- [ ] Move the local file path to a remote SFTP path
 - [ ] Add Success and failure totals on batch (Threadsafe updates)
+
+## ETL and Reporting Backlog
+- [X] Read excel into type accurate class
+- [X] Read excel data into a batched staging
+- [X] Archive file when completed
+- [X] Fail if start date already exist (First remove can't have duplicates)
+- [ ] Check client account that the chain is healthy (a) instances are not longer than X from each other and that (b) there are no missing chains from the first to last entry
