@@ -24,7 +24,7 @@ This is optional to view the [documentation](https://github.com/mariusvrstr/Pyth
 4. Open the *.puml file and press Alt+D to preview
 
 ## Things to unpack
-- Is it necessary to batchbreading of file for large files?
+- Is it necessary to batch reading of file for large files?
 - Is there a need to customize the validity period e.g. 30 days?
 
 ## Backlog
@@ -43,10 +43,12 @@ This is optional to view the [documentation](https://github.com/mariusvrstr/Pyth
 - [ ] When new insert covers 80% of placeholder remove placeholder and adjust
 - [ ] Update existing SCD chain with historic data (a) Replace placeholder (b) More granular
 - [ ] Fail if start date already exist (First remove can't have duplicates)
-- [ ] Unit testing
+- [ ] Unit testing with transaction rollback
 - [ ] Monitor (Asyncio) and process files in seperate threads up to X
 - [ ] Monitor (Asyncio) for batches that are ready and process them in seperate thread up to x
 - [ ] Before SCD batch processing run client cleanup (a) items that has missing submissions for client gets placeholder (b) items that was missing in previous submissions amounts are zero's
+- [ ] From (date) get me X instances every day/month
+- [ ] Check client account that the chain is healthy (a) instances are not longer than X from each other and that (b) there are no missing chains from the first to last entry
 
 ### Backlog
 - [ ] Keep transactions on item level and skip update if current batch reference <> current batch (Re-Run batch without re processing)
