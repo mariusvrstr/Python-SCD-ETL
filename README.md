@@ -2,10 +2,17 @@
 A python example of reading and processing excel files into SCD table
 
 ### Conceptual Architecture
-![image](https://user-images.githubusercontent.com/2478826/195299688-09855829-7808-4350-bc63-40f1a02c776d.png)
 
-### ERD Diagram
-![image](https://user-images.githubusercontent.com/2478826/195299375-ce7858c0-0f7c-4612-9eda-1556847bef46.png)
+<img src="https://user-images.githubusercontent.com/2478826/195299688-09855829-7808-4350-bc63-40f1a02c776d.png" width="600" />
+
+### Overview
+File Template
+
+![image](https://user-images.githubusercontent.com/2478826/195528823-059249d8-2ffd-47cf-b591-81016e04bbce.png)
+
+ERD Diagram
+
+![image](https://user-images.githubusercontent.com/2478826/195529674-d77f2dd3-3e65-48e4-9fa6-6d796448d599.png)
 
 ## Setup
 
