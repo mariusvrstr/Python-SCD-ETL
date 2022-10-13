@@ -1,4 +1,5 @@
 from datetime import datetime
+from symbol import term
 from xmlrpc.client import Boolean
 import pandas as pd
 import os
@@ -41,50 +42,44 @@ class FileProcessingService():
             return False
 
     def process_file(self, file_path) -> StageBatch:
+        data = pd.read_excel(file_path)
+        df = pd.DataFrame(data)
 
-        try:
-            data = pd.read_excel(file_path)
-            df = pd.DataFrame(data)
+        client_account = df.loc[1, FileHeadings.ClientAccount.value]
 
-            client_account = df.loc[1, FileHeadings.ClientAccount.value]
+        filename = os.path.basename(file_path)
+        file_hash = self._get_file_hash(file_path)
 
-            filename = os.path.basename(file_path)
-            file_hash = self._get_file_hash(file_path)
+        batch = self.stage_repo.get_stage_batch(client_account, file_hash)
+        if (batch is None):
+            batch = self.stage_repo.add_stage_batch(client_account, filename, file_hash)
 
-            batch = self.stage_repo.get_stage_batch(client_account, file_hash)
-            if (batch is None):
-                batch = self.stage_repo.add_stage_batch(client_account, filename, file_hash)
+        if (batch.batch_status != BatchStatus.Error and batch.batch_status != BatchStatus.InProgress): # Can re-process on error
+            raise ValueError(f'Cannot process [{filename}] file for [{batch.client_account}] account. It was already processed [{batch.end_date}]')
 
-            if (batch.batch_status != BatchStatus.Error and batch.batch_status != BatchStatus.InProgress): # Can re-process on error
-                raise ValueError(f'Cannot process [{filename}] file for [{batch.client_account}] account. It was already processed [{batch.end_date}]')
+        success_count = 0
+        failure_count = 0
 
-            success_count = 0
-            failure_count = 0
+        for index, row in df.iterrows():
+        
+            item = FileItem().create(
+                effective_date = row[FileHeadings.EffectiveDate.value],
+                client_account = row[FileHeadings.ClientAccount.value],
+                external_reference= row[FileHeadings.ExternalReference.value],
+                company_name=row[FileHeadings.CompanyName.value],
+                amount=row[FileHeadings.Amount.value], 
+                term=row[FileHeadings.Term.value])
 
-            for index, row in df.iterrows():
-            
-                item = FileItem().create(
-                    effective_date = row[FileHeadings.EffectiveDate.value],
-                    client_account = row[FileHeadings.ClientAccount.value],
-                    external_reference= row[FileHeadings.ExternalReference.value],
-                    company_name=row[FileHeadings.CompanyName.value],
-                    amount=row[FileHeadings.Amount.value], 
-                    status=row[FileHeadings.Status.value])
+            success = self.process_item(item, batch.id)
 
-                success = self.process_item(item, batch.id)
+            if (success):
+                success_count += 1
+            else:
+                failure_count += 1
 
-                if (success):
-                    success_count += 1
-                else:
-                    failure_count += 1
-
-            batch = self.stage_repo.complete_batch(batch.id, success_count, failure_count, 0.2)
-            return batch       
-           
-        except Exception as ex:
-            # print(f"Oops! {ex.__class__} occurred. Details: {ex}")  
-            raise # re-throw after writing error to screen
-
+        batch = self.stage_repo.complete_batch(batch.id, success_count, failure_count, 0.2)
+        return batch       
+        
 
 
 

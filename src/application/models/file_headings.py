@@ -6,7 +6,7 @@ class FileHeadings(Enum):
     ExternalReference = "External Reference"
     CompanyName = "Company Name"
     Amount = "Amount"
-    Status = "Status"
+    Term = "Term"
 
 
 

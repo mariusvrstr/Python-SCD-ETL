@@ -3,7 +3,7 @@ from sqlite3 import dbapi2
 from src.data_access.database.models.database_models import MasterRecordEntity, ClientAccountEntity
 from src.application.models.client_account import ClientAccount
 from src.application.models.master_record import MasterRecord
-from src.application.models.record_status import RecordStatus
+from src.application.models.term import RecordStatus
 from src.application.models.stage_record import StageRecord
 from src.data_access.database.common.scd_action import SCDAction
 from src.data_access.database.common.repository_base import RepositoryBase
@@ -26,7 +26,7 @@ class MasterRepository(RepositoryBase):
         client = self.context.query(ClientAccountEntity).filter(
             ClientAccountEntity.account_number == account_number).first() 
         
-        mapped = self.map_to_business_client(client)
+        mapped = self.map(ClientAccount, client)
         return mapped
 
     def add_client_account(self, account_number) -> ClientAccount:
@@ -34,7 +34,7 @@ class MasterRepository(RepositoryBase):
         self.context.add(client)
         self.sync(client)
 
-        mapped = self.map_to_business_client(client)
+        mapped = self.map(ClientAccount, client)
         return mapped
 
     def get_next_master_record(self, id):
@@ -48,7 +48,7 @@ class MasterRepository(RepositoryBase):
                 and (MasterRecordEntity.to_date is None or effective_date < MasterRecordEntity.to_date)
             ).first()
 
-            mapped = self.map_to_business(master_record)
+            mapped = self.map(MasterRecord, master_record)
             return mapped        
 
     def add_master_record(self, stage_record: StageRecord, client_account_id) -> StageRecord:
@@ -60,7 +60,7 @@ class MasterRepository(RepositoryBase):
                 stage_record.external_reference,
                 stage_record.company_name,
                 stage_record.amount,
-                stage_record.status.value,
+                stage_record.term.value,
                 client_account_id
             )
 
@@ -96,35 +96,4 @@ class MasterRepository(RepositoryBase):
             # Sync previous
 
         self.sync(new_master_record)
-        return self.map_to_business(new_master_record)
-
-    '''
-    ========================================
-    Mappers TODO: Replace with a auto mapper
-    ========================================
-    '''
-    def map_to_business(self, db_object: MasterRecordEntity) -> MasterRecord:
-        mapped = MasterRecord().create(
-            db_object.external_reference,
-            db_object.company_name,
-            db_object.amount,
-            RecordStatus[db_object.status],
-            db_object.from_date,
-            db_object.to_date,
-            db_object.last_updated,
-            db_object.is_deleted,
-            db_object.has_changes,
-            db_object.batch_id,
-            db_object.client_account_id,
-            db_object.id)
-        return mapped
-
-    def map_to_database(self, bus_object) -> MasterRecordEntity:
-        raise ValueError('Map to database is not used')
-
-    def map_to_business_client(self, db_object: ClientAccountEntity) -> ClientAccount:
-        mapped = ClientAccount().create(
-            db_object.id,
-            db_object.account_number,
-            db_object.last_updated)
-        return mapped
+        return self.map(MasterRecord, new_master_record)

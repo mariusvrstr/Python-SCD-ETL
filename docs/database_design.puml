@@ -31,9 +31,10 @@ class MasterRecord {
     status
     from_date
     to_date
-    last_updated
-    is_deleted    
     has_changes
+    last_updated
+    is_deleted
+    is_placeholder
     -batch_id
     -client_account_id
 }

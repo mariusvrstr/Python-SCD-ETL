@@ -1,16 +1,11 @@
+from datetime import datetime
+from pydantic import BaseModel
+from typing import Optional
 
-class ClientAccount():
-    id = None
-    account_number = None
-    last_updated = None
+class ClientAccount(BaseModel):
+    id: int
+    account_number: str
+    last_updated: Optional[datetime]
 
-    def create(self, 
-            account_number, 
-            last_updated, 
-            id = None):
-
-        self.id = id
-        self.account_number = account_number
-        self.last_updated = last_updated
-
-        return self
+    class Config:
+        orm_mode=True

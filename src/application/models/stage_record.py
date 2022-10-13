@@ -1,21 +1,18 @@
+from datetime import datetime
+from xmlrpc.client import Boolean
+from pydantic import BaseModel
+from typing import Optional
+from src.application.models.term import Term
 
+class StageRecord(BaseModel):
+    id: int
+    effective_date: datetime
+    insert_date: datetime
+    external_reference: str
+    company_name: str
+    amount: Optional[float]
+    term: Optional[Term]
+    is_processed: bool = False
 
-class StageRecord():
-    id = None
-    effective_date = None
-    insert_date = None
-    external_reference = None
-    company_name = None
-    amount = None
-    status = None
-
-    def create(self, effective_date, insert_date, external_reference, amount, status, id = None):
-        self.id = id
-        self.effective_date = effective_date
-        self.insert_date = insert_date
-        self.external_reference = external_reference
-        self.amount = amount
-        self.status = status
-        
-        return self
-    
+    class Config:
+        orm_mode=True

@@ -45,21 +45,23 @@ class StageRecordEntity(Base):
     external_reference = Column(String)
     company_name = Column(String)
     amount = Column(Float)
-    status = Column(String)
+    term = Column(String)
+    is_processed = Column(Boolean)
 
     # Foreign Key - One Side Oposed to Many
     batch_id = Column(Integer, ForeignKey('StageBatch.id'))
 
     # UniqueConstraint("batch_id", "external_reference", name="unique_debtor_batch")
 
-    def create(self, effective_date, external_reference, company_name, amount, status, batch_id, id = None):
+    def create(self, effective_date, external_reference, company_name, amount, term, batch_id, is_processed = False, id = None):
         self.id = id
         self.effective_date = effective_date
         self.insert_date = datetime.now()
         self.external_reference = external_reference
         self.company_name = company_name
         self.amount = amount
-        self.status = status
+        self.term = term
+        self.is_processed = is_processed
         self.batch_id = batch_id
 
         return self
@@ -82,7 +84,7 @@ class MasterRecordEntity(Base):
     batch_id = Column(Integer, ForeignKey('StageBatch.id'))
     client_account_id = Column(Integer, ForeignKey('ClientAccount.id'))
 
-    def create(self, external_reference, company_name, amount, status, client_account_id, id = None):
+    def create(self, external_reference, company_name, amount, status, client_account_id, is_placeholder = False, id = None):
         self.id = id
         self.external_reference = external_reference
         self.company_name = company_name
@@ -90,7 +92,7 @@ class MasterRecordEntity(Base):
         self.status = status
         self.client_account_id = client_account_id
         self.is_deleted = False
-
+        self.is_placeholder = is_placeholder
         return self
 
 class ClientAccountEntity(Base):
