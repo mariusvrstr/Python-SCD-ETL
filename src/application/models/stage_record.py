@@ -1,8 +1,8 @@
 from datetime import datetime
-from xmlrpc.client import Boolean
 from pydantic import BaseModel
 from typing import Optional
 from src.application.models.term import Term
+from src.application.models.process_status import ProcessStatus
 
 class StageRecord(BaseModel):
     id: int
@@ -12,7 +12,7 @@ class StageRecord(BaseModel):
     company_name: str
     amount: Optional[float]
     term: Optional[Term]
-    is_processed: bool = False
+    process_status: ProcessStatus = ProcessStatus.Unprocessed
 
     class Config:
         orm_mode=True

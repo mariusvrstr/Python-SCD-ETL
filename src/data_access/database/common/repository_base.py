@@ -28,14 +28,19 @@ class RepositoryBase(ABC):
             mapped = business_class.from_orm(item)
             items.append(mapped)
 
+        return items
+
     def __init__(self, context: Session, db_entity_type, business_entity_type) -> None:
         self.context = context
         self.db_entity_type = db_entity_type
         self.business_entity_type = business_entity_type
 
-    def get(self, id):
-        account = self.context.get(self.db_entity_type, id)
-        return self.map(account)
+    def get(self, id, database_entity = None):
+        if database_entity is None:
+            database_entity = self.db_entity_type
+
+        item = self.context.get(database_entity, id)
+        return self.map(item)
 
     # Wrap this in the implimented repository, need to create a valid DB entity and services should not be passing DB objects
     def add(self, entity):

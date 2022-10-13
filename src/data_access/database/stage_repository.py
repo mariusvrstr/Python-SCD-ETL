@@ -1,4 +1,7 @@
+import ctypes
 from datetime import datetime
+from operator import and_
+from src.application.models.process_status import ProcessStatus
 from src.data_access.database.models.database_models import StageRecordEntity, StageBatchEntity
 from src.application.models.stage_batch import StageBatch
 from src.application.models.stage_record import StageRecord
@@ -12,15 +15,25 @@ class StageRepository(RepositoryBase):
     def __init__(self, context) -> None:
         super().__init__(context, StageRecordEntity, StageRecord)
 
-    def get_ready_batches(self):
+    def get_ready_batches(self, size:int = 50) -> ctypes.Array:
         batches = self.context.query(StageBatchEntity).filter(
-            StageBatchEntity.batch_status == BatchStatus.Ready.value)
+            StageBatchEntity.batch_status == BatchStatus.Ready.value).limit(size).all()
 
         return self.map_all(batches, StageBatch)
 
+    def get_batched_stage_records(self, batch_id, process_status: ProcessStatus = ProcessStatus.Unprocessed, size: int = 20) -> ctypes.Array:
+        records = self.context.query(StageRecordEntity).filter(
+            StageRecordEntity.batch_id == batch_id,
+            StageRecordEntity.process_status == process_status.value
+        ).limit(size).all()
+        
+        return self.map_all(records)        
+
     def get_stage_batch(self, client_account, file_hash) -> StageBatch:
         batch = self.context.query(StageBatchEntity).filter(
-            StageBatchEntity.client_account == client_account and StageBatchEntity.file_hash == file_hash and StageBatchEntity.batch_status != BatchStatus.Deleted.value).first() 
+            StageBatchEntity.client_account == client_account,
+            StageBatchEntity.file_hash == file_hash,
+            StageBatchEntity.batch_status != BatchStatus.Deleted.value).one_or_none()
         
         return self.map(batch, StageBatch)
 
@@ -40,7 +53,7 @@ class StageRepository(RepositoryBase):
 
         return self.map(record)
 
-    def complete_batch(self, batch_id, success_count: int, failure_count: int, error_threshold = 0.0):
+    def finalize_batch_upload(self, batch_id, success_count: int, failure_count: int, error_threshold = 0.0):
         batch = self.context.get(StageBatchEntity, batch_id)
 
         if success_count == 0 or (failure_count > 0 and ((success_count/failure_count) > error_threshold)):
@@ -54,3 +67,13 @@ class StageRepository(RepositoryBase):
 
         self.sync()
         return self.map(batch, StageBatch)
+
+    def complete_batch_process(self, id, batch_status: BatchStatus = BatchStatus.Complete):
+        batch = self.context.get(StageBatchEntity, id)
+        batch.batch_status = batch_status.value
+        self.sync(batch)
+
+    def complete_stage_record_process(self, id, process_status: ProcessStatus):
+        record = self.context.get(StageRecordEntity, id)
+        record.process_status = process_status.value
+        self.sync(record)

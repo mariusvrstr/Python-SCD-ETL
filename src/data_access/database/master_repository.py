@@ -3,7 +3,7 @@ from sqlite3 import dbapi2
 from src.data_access.database.models.database_models import MasterRecordEntity, ClientAccountEntity
 from src.application.models.client_account import ClientAccount
 from src.application.models.master_record import MasterRecord
-from src.application.models.term import RecordStatus
+from src.application.models.term import Term
 from src.application.models.stage_record import StageRecord
 from src.data_access.database.common.scd_action import SCDAction
 from src.data_access.database.common.repository_base import RepositoryBase

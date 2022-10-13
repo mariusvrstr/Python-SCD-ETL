@@ -54,8 +54,8 @@ This is optional to view the [documentation](https://github.com/mariusvrstr/Pyth
 ## Resiliance and Error Backlog
 - [X] Minor errors should optionally be able to allow to proceed
 - [X] Block processing of files that was already processed
-- [ ] Must be able to continue processing of a file or batch if it was interupted without re-processing all entries (service was restarted while it was busy)
-- [ ] Must be able to re-run a batch that previously failed
+- [X] Must be able to continue processing of a file or batch if it was interupted without re-processing all entries (service was restarted while it was busy)
+- [X] Must be able to re-run a batch that previously failed
 - [ ] From (date) get me X instances every day/month
 - [ ] Report on error and bubble up details
 - [ ] Add Success and failure totals on batch (Threadsafe updates)
@@ -66,4 +66,4 @@ This is optional to view the [documentation](https://github.com/mariusvrstr/Pyth
 - [X] Archive file when completed
 - [X] Fail if start date already exist (First remove can't have duplicates)
 - [ ] Check client account that the chain is healthy (a) instances are not longer than X from each other and that (b) there are no missing chains from the first to last entry
-- [ ] Add stage item process_status, for batches in READY status get all pending items x at a time then mark batch as complete 
+- [X] Add stage item process_status, for batches in READY status get all pending items x at a time then mark batch as complete 

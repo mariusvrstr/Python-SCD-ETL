@@ -77,7 +77,7 @@ class FileProcessingService():
             else:
                 failure_count += 1
 
-        batch = self.stage_repo.complete_batch(batch.id, success_count, failure_count, 0.2)
+        batch = self.stage_repo.finalize_batch_upload(batch.id, success_count, failure_count, 0.2)
         return batch       
         
 
