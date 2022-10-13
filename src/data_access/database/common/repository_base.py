@@ -37,6 +37,7 @@ class RepositoryBase(ABC):
         account = self.context.get(self.db_entity_type, id)
         return self.map(account)
 
+    # Wrap this in the implimented repository, need to create a valid DB entity and services should not be passing DB objects
     def add(self, entity):
         if not isinstance(entity, self.db_entity_type):
             raise ValueError(f'Unable to add [{entity}] not a valid [{self.db_entity_type}] entity.')
