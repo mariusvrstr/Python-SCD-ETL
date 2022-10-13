@@ -8,11 +8,11 @@ A python example of reading and processing excel files into SCD table
 ### Overview
 File Template
 
-![image](https://user-images.githubusercontent.com/2478826/195528823-059249d8-2ffd-47cf-b591-81016e04bbce.png)
+![image](https://user-images.githubusercontent.com/2478826/195708755-a099193e-3317-4b38-9500-2d7b61b5f801.png)
 
 ERD Diagram
 
-![image](https://user-images.githubusercontent.com/2478826/195529674-d77f2dd3-3e65-48e4-9fa6-6d796448d599.png)
+![image](https://user-images.githubusercontent.com/2478826/195708826-c7a89885-7ace-45be-a4db-88c10abbf839.png)
 
 ## Setup
 
