@@ -18,6 +18,7 @@ ERD Diagram
 
 ## Python Project
 1. Run the "setup.ps1" powershell script to create local virtual environment and install dependancies
+2. Install [TablePlus](https://tableplus.com/) for SQLLite (Solution creats scd_sample.db file in root folder)
 
 ## Execute
 1. Copy sample files from "../etl/sample_files/*.xlsx" into root "../etl/"
