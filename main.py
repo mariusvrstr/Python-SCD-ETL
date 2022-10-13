@@ -1,4 +1,5 @@
 from datetime import datetime
+from doctest import master
 import os
 import glob
 from src.application.models.process_status import ProcessStatus
@@ -59,11 +60,17 @@ def process_ready_batched():
     
     try:
         stage_repo = StageRepository(context)
+        master_repo = MasterRepository(context)
         batches = stage_repo.get_ready_batches()
 
         for batch in batches:
             
             try:
+                client_account = master_repo.get_client_account(batch.client_account)
+                if (client_account is None):
+                    client_account = master_repo.add_client_account(batch.client_account)
+                    context.commit()
+
                 stage_records = stage_repo.get_batched_stage_records(batch.id, ProcessStatus.Unprocessed, 5)
 
                 while len(stage_records) > 0:
@@ -76,7 +83,8 @@ def process_ready_batched():
 
                         try:
                             print(f'SCD THE STAGE RECORD ID [{record.id}]/ BATC [{batch.id}]')
-
+                            # Should this be in a seperate indipendant contex?
+                            master_repo.add_master_record(record, client_account.id)
                             stage_repo.complete_stage_record_process(record.id, ProcessStatus.Processed)
 
                         except Exception as ex:

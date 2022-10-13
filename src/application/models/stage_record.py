@@ -13,6 +13,7 @@ class StageRecord(BaseModel):
     amount: Optional[float]
     term: Optional[Term]
     process_status: ProcessStatus = ProcessStatus.Unprocessed
+    batch_id: int
 
     class Config:
         orm_mode=True

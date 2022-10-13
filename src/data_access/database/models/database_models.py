@@ -3,6 +3,7 @@ from datetime import datetime
 from tokenize import String
 from unicodedata import name
 from src.data_access.database.common.database import Base
+from sqlalchemy.sql import null
 from sqlalchemy.sql.schema import ForeignKey
 from sqlalchemy.sql.sqltypes import Integer, String, Float, DateTime, Boolean
 from sqlalchemy.orm import relationship
@@ -73,27 +74,34 @@ class MasterRecordEntity(Base):
     external_reference = Column(String)
     company_name = Column(String)
     amount = Column(Float)
-    status = Column(String)
+    term = Column(String)
 
     from_date = Column(DateTime)
     to_date = Column(DateTime)
     last_updated = Column(DateTime)
     is_deleted = Column(Boolean)
+    # Has changes should be one level higher out of SCD 1:1 with relationship
     has_changes = Column(Boolean)
        
     # Foreign Key - One Side Oposed to Many
     batch_id = Column(Integer, ForeignKey('StageBatch.id'))
     client_account_id = Column(Integer, ForeignKey('ClientAccount.id'))
 
-    def create(self, external_reference, company_name, amount, status, client_account_id, is_placeholder = False, id = None):
+    def create(self, external_reference, company_name, amount, term, client_account_id, from_date, batch_id, is_placeholder = False, id = None):
         self.id = id
         self.external_reference = external_reference
         self.company_name = company_name
         self.amount = amount
-        self.status = status
+        self.term = term
         self.client_account_id = client_account_id
         self.is_deleted = False
         self.is_placeholder = is_placeholder
+        self.from_date = from_date
+        self.to_date = null()
+        self.last_updated = datetime.now()        
+        self.has_changes = False
+        self.batch_id = batch_id
+
         return self
 
 class ClientAccountEntity(Base):
@@ -103,3 +111,10 @@ class ClientAccountEntity(Base):
     last_updated = Column(DateTime)
 
     records = relationship('MasterRecordEntity', back_populates='')
+
+    def create(self, account_number, id = None):
+        self.id = id
+        self.account_number = account_number
+        self.last_updated = datetime.now()
+
+        return self

@@ -14,6 +14,7 @@ class MasterRecord(BaseModel):
     last_updated: datetime
     is_deleted: bool = False
     is_placeholder: bool = False
+    # Has changes should be one level higher out of SCD 1:1 with relationship
     has_changes: bool = False
     batch_id: int
     client_account_id: int

@@ -8,6 +8,7 @@ from src.application.models.stage_record import StageRecord
 from src.data_access.database.common.scd_action import SCDAction
 from src.data_access.database.common.repository_base import RepositoryBase
 from sqlalchemy.sql import select
+from sqlalchemy import or_, and_
 
 class MasterRepository(RepositoryBase):
 
@@ -29,7 +30,7 @@ class MasterRepository(RepositoryBase):
         return self.map(client, ClientAccount)
 
     def add_client_account(self, account_number) -> ClientAccount:
-        client = ClientAccount().create(account_number)
+        client = ClientAccountEntity().create(account_number)
         self.context.add(client)
         self.sync(client)
 
@@ -41,9 +42,15 @@ class MasterRepository(RepositoryBase):
 
     def get_master_record(self, external_reference, client_account_id, effective_date) -> MasterRecord:
             master_record = self.context.query(MasterRecordEntity).filter(
-                MasterRecordEntity.external_reference == external_reference and MasterRecordEntity.client_account_id == client_account_id
-                and MasterRecordEntity.is_deleted == False and effective_date > MasterRecordEntity.from_date 
-                and (MasterRecordEntity.to_date is None or effective_date < MasterRecordEntity.to_date)
+                and_(
+                    MasterRecordEntity.external_reference == external_reference,
+                    MasterRecordEntity.client_account_id == client_account_id,
+                    MasterRecordEntity.is_deleted == False,
+                    effective_date > MasterRecordEntity.from_date,
+                    or_(
+                        MasterRecordEntity.to_date is None,
+                        effective_date < MasterRecordEntity.to_date)
+                    )                
             ).first()
 
             return self.map(master_record)        
@@ -57,8 +64,10 @@ class MasterRepository(RepositoryBase):
                 stage_record.external_reference,
                 stage_record.company_name,
                 stage_record.amount,
-                stage_record.term.value,
-                client_account_id
+                stage_record.term.value,                
+                client_account_id,
+                stage_record.effective_date,
+                stage_record.batch_id
             )
 
         if (existing_record is not None and existing_record.from_date == new_master_record.from_date):
@@ -66,13 +75,10 @@ class MasterRepository(RepositoryBase):
 
         if (existing_record is not None and self._check_for_changes(existing_record, new_master_record) == False):
             scd_action = SCDAction.NoChanges
-            return None
-
-        new_master_record.from_date = stage_record.effective_date
+            existing_record.last_updated = datetime.now()
 
         if (existing_record is None):
             scd_action = SCDAction.Add
-            new_master_record.last_updated = datetime.now()            
             new_master_record.to_date = None
             self.context.add(new_master_record)           
 
@@ -82,15 +88,16 @@ class MasterRepository(RepositoryBase):
             new_master_record.from_date = stage_record.effective_date
             new_master_record.to_date = None
             existing_record.to_date = new_master_record.from_date
-            new_master_record.last_updated = datetime.now()     
 
         else:
             scd_action = SCDAction.Insert
-            new_master_record.last_updated = datetime.now()
             # Update previous.to_date = new_master_record.from_date
             # Update new_master_record.to_date = existing.from_date
             # self.context.add(new_master_record)  
             # Sync previous
+
+        if (existing_record is not None):
+            self.sync(existing_record)
 
         self.sync(new_master_record)
         return self.map(new_master_record)
