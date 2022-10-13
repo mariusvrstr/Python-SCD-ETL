@@ -6,20 +6,26 @@ class RepositoryBase(ABC):
     db_entity_type = None
     business_entity_type = None
 
-    def map(self, type, db_object):
+    def map(self, db_object, business_class = None):
         if (db_object is None):
             return None
 
-        mapped = type.from_orm(db_object)
+        if business_class is None:
+            business_class = self.business_entity_type
+
+        mapped = business_class.from_orm(db_object)
         return mapped
 
-    def map_all(self, type, db_objects):
+    def map_all(self, db_objects, business_class = None):
         if (db_objects is None):
             return None
+
+        if business_class is None:
+            business_class = self.business_entity_type
         
         items = []
         for item in db_objects:
-            mapped = type.from_orm(item)
+            mapped = business_class.from_orm(item)
             items.append(mapped)
 
     def __init__(self, context: Session, db_entity_type, business_entity_type) -> None:
@@ -29,8 +35,7 @@ class RepositoryBase(ABC):
 
     def get(self, id):
         account = self.context.get(self.db_entity_type, id)
-        mapped = self.business_entity_type.from_orm(account)
-        return mapped
+        return self.map(account)
 
     def add(self, entity):
         if not isinstance(entity, self.db_entity_type):
@@ -39,8 +44,7 @@ class RepositoryBase(ABC):
         self.context.add(entity)
         self.sync(entity)
 
-        mapped = self.business_entity_type.from_orm(entity)
-        return mapped
+        return self.map(entity)
 
     def delete(self, id):
         self.context.query(self.db_entity_type).filter(self.db_entity_type.id == id).delete()

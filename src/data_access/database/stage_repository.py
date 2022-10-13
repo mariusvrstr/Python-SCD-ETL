@@ -19,23 +19,20 @@ class StageRepository(RepositoryBase):
         batches = self.context.query(StageBatchEntity).filter(
             StageBatchEntity.batch_status == BatchStatus.Ready.value)
 
-        items = self.map_all(StageBatch, batches)
-        return items
+        return self.map_all(batches, StageBatch)
 
     def get_stage_batch(self, client_account, file_hash) -> StageBatch:
         batch = self.context.query(StageBatchEntity).filter(
             StageBatchEntity.client_account == client_account and StageBatchEntity.file_hash == file_hash and StageBatchEntity.batch_status != BatchStatus.Deleted.value).first() 
         
-        mapped = self.map(StageBatch, batch)
-        return mapped
+        return self.map(batch, StageBatch)
 
     def add_stage_batch(self, client_account, filename, file_hash):
         batch = StageBatchEntity().create(client_account, filename, file_hash)
         self.context.add(batch)
         self.sync(batch)
 
-        mapped = self.map(StageBatch, batch)
-        return mapped
+        return self.map(batch, StageBatch)
 
     def add_stage_record(self, file_item: FileItem, batch_id: int) -> StageRecord:
         record = StageRecordEntity().create(
@@ -44,8 +41,7 @@ class StageRepository(RepositoryBase):
         self.add(record)
         self.sync(record)
 
-        mapped = self.map(StageRecord, record)
-        return mapped
+        return self.map(record)
 
     def complete_batch(self, batch_id, success_count: int, failure_count: int, error_threshold = 0.0):
         batch = self.context.get(StageBatchEntity, batch_id)
@@ -60,5 +56,4 @@ class StageRepository(RepositoryBase):
         batch.failure_count = failure_count
 
         self.sync()
-        mapped = self.map(StageBatch, batch)
-        return mapped
+        return self.map(batch, StageBatch)

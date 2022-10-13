@@ -26,16 +26,14 @@ class MasterRepository(RepositoryBase):
         client = self.context.query(ClientAccountEntity).filter(
             ClientAccountEntity.account_number == account_number).first() 
         
-        mapped = self.map(ClientAccount, client)
-        return mapped
+        return self.map(client, ClientAccount)
 
     def add_client_account(self, account_number) -> ClientAccount:
         client = ClientAccount().create(account_number)
         self.context.add(client)
         self.sync(client)
 
-        mapped = self.map(ClientAccount, client)
-        return mapped
+        return self.map(client, ClientAccount)
 
     def get_next_master_record(self, id):
         # get top 1 order by from_date desc where id <> current id
@@ -48,8 +46,7 @@ class MasterRepository(RepositoryBase):
                 and (MasterRecordEntity.to_date is None or effective_date < MasterRecordEntity.to_date)
             ).first()
 
-            mapped = self.map(MasterRecord, master_record)
-            return mapped        
+            return self.map(master_record)        
 
     def add_master_record(self, stage_record: StageRecord, client_account_id) -> StageRecord:
 
@@ -96,4 +93,4 @@ class MasterRepository(RepositoryBase):
             # Sync previous
 
         self.sync(new_master_record)
-        return self.map(MasterRecord, new_master_record)
+        return self.map(new_master_record)
