@@ -68,3 +68,10 @@ This is optional to view the [documentation](https://github.com/mariusvrstr/Pyth
 - [X] Fail if start date already exist (First remove can't have duplicates)
 - [ ] Check client account that the chain is healthy (a) instances are not longer than X from each other and that (b) there are no missing chains from the first to last entry
 - [X] Add stage item process_status, for batches in READY status get all pending items x at a time then mark batch as complete 
+
+## Optimization Actions
+- [ ] Add index on stage record around batch and client account
+- [ ] Add indexes around master record (a) SCD + ref + client (b) ?
+- [ ] Multiple threads for concurrent file processing
+- [ ] Multiple threads for concurrent batch processing
+- [ ] Use a stored procedure to read SCD increments for low level DB optimizations
