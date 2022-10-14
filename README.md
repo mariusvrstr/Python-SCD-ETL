@@ -55,7 +55,7 @@ This is optional to view the [documentation](https://github.com/mariusvrstr/Pyth
 ## Resiliance and Error Backlog
 - [X] Minor errors should optionally be able to allow to proceed
 - [X] Block processing of files that was already processed
-- [ ] Must be able to continue processing of a file or batch if it was interupted without re-processing all entries (service was restarted while it was busy) - cleanup in progress at startup by (a) deleting the batch (b) moving the file back to rrl root
+- [X] Must be able to continue processing of a file or batch if it was interupted without re-processing all entries (service was restarted while it was busy) - cleanup in progress at startup by (a) deleting the batch (b) moving the file back to rrl root
 - [X] Must be able to re-run a batch that previously failed
 - [ ] From (date) get me X instances every day/month
 - [ ] Report on error and bubble up details
