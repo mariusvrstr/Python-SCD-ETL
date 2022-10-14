@@ -3,18 +3,25 @@ from doctest import master
 import os
 import glob
 
-#from src.application.models.process_status import ProcessStatus
-#from src.application.models.stage_record import StageRecord
-#from src.data_access.database.master_repository import MasterRepository
-#from src.data_access.database.stage_repository import StageRepository
-#from src.application.models.batch_status import BatchStatus
-
 from src.data_access.database.common.database import get_db_Session, engine
 from src.application.services.file_processing_service import FileProcessingService
 from src.application.services.scd_service import SCDService
 from src.application.models.batch_status import BatchStatus
-
 from src.data_access.database.models import database_models
+
+def clean_orphaned_batches(root_folder):
+    processing_folder = f'{root_folder}processing\\'
+    context = get_db_Session()
+    file_service = FileProcessingService(context)
+
+    for file in glob.glob(f"{processing_folder}*.xlsx"):
+        file_service.delete_file_batch_for_file(file)
+
+        file_name = os.path.basename(file)
+        original_file_name = file_name[16:]
+        
+        os.rename(file, f'{root_folder}{original_file_name}')  
+        context.commit()
 
 
 def etl_to_stage():
@@ -23,7 +30,9 @@ def etl_to_stage():
         directory = os.getcwd()
         original_file_name = None
         working_file_path = None
-        root_folder = f'{directory}\\etl\\'        
+        root_folder = f'{directory}\\etl\\'    
+
+        clean_orphaned_batches(root_folder)
         
         for file in glob.glob(f"{root_folder}*.xlsx"):
             context = get_db_Session()
@@ -73,8 +82,7 @@ def process_ready_batched():
 
 
 def main():
-    database_models.Base.metadata.create_all(engine) # Create/Sync database
-    
+    database_models.Base.metadata.create_all(engine) # Create/Sync database    
     # TODO: Move to seperate schedule
     etl_to_stage()
 

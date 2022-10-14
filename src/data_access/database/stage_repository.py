@@ -1,6 +1,6 @@
 import ctypes
 from datetime import datetime
-from operator import and_
+from operator import and_, or_
 from src.application.models.process_action import ProcessAction
 from src.application.models.process_status import ProcessStatus
 from src.data_access.database.models.database_models import StageRecordEntity, StageBatchEntity
@@ -28,14 +28,29 @@ class StageRepository(RepositoryBase):
             StageRecordEntity.process_status == process_status.value
         ).limit(size).all()
         
-        return self.map_all(records)        
-
-    def get_stage_batch(self, client_account, file_hash) -> StageBatch:
-        batch = self.context.query(StageBatchEntity).filter(
-            StageBatchEntity.client_account == client_account,
-            StageBatchEntity.file_hash == file_hash,
-            StageBatchEntity.batch_status != BatchStatus.Deleted.value).one_or_none()
+        return self.map_all(records)
         
+    def delete_batch(self, batch_id):
+        #Check that status is only Error or in Progress before continueing
+        #TODO: Delete rows
+        #TODO: Delete batch
+        pass
+
+
+    def get_stage_batch(self, file_hash, client_account = None) -> StageBatch:
+        batch = None
+
+        #TODO: The below is ugly need time to work out filtering usually do a (var = None or column = var) that combines below
+        if (client_account is not None):
+            batch = self.context.query(StageBatchEntity).filter(
+                    StageBatchEntity.file_hash == file_hash,
+                    StageBatchEntity.batch_status != BatchStatus.Deleted.value,
+                    StageBatchEntity.client_account == client_account).one_or_none()
+        else: 
+            batch = self.context.query(StageBatchEntity).filter(
+                    StageBatchEntity.file_hash == file_hash,
+                    StageBatchEntity.batch_status == BatchStatus.InProgress.value).one_or_none()  
+
         return self.map(batch, StageBatch)
 
     def add_stage_batch(self, client_account, filename, file_hash):
