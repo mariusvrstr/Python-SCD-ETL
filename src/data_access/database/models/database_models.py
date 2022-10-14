@@ -10,6 +10,7 @@ from sqlalchemy.orm import relationship
 from sqlalchemy import Column, UniqueConstraint
 from src.application.models.batch_status import BatchStatus
 from src.application.models.process_status import ProcessStatus
+from src.application.models.process_action import ProcessAction
 
 class StageBatchEntity(Base):
     __tablename__ = 'StageBatch'
@@ -49,13 +50,17 @@ class StageRecordEntity(Base):
     amount = Column(Float)
     term = Column(String)
     process_status = Column(String)
+    process_action = Column(String)
 
     # Foreign Key - One Side Oposed to Many
     batch_id = Column(Integer, ForeignKey('StageBatch.id'))
 
     # UniqueConstraint("batch_id", "external_reference", name="unique_debtor_batch")
 
-    def create(self, effective_date, external_reference, company_name, amount, term, batch_id, process_status = ProcessStatus.Unprocessed, id = None):
+    def create(self, 
+            effective_date, external_reference, company_name, amount, term, batch_id, 
+            process_status = ProcessStatus.Unprocessed, process_action: ProcessAction = ProcessAction.Unknown, id = None):
+        
         self.id = id
         self.effective_date = effective_date
         self.insert_date = datetime.now()
@@ -64,6 +69,7 @@ class StageRecordEntity(Base):
         self.amount = amount
         self.term = term
         self.process_status = process_status.value
+        self.process_action = process_action.value
         self.batch_id = batch_id
 
         return self

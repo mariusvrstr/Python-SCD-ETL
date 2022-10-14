@@ -70,6 +70,7 @@ This is optional to view the [documentation](https://github.com/mariusvrstr/Pyth
 - [X] Add stage item process_status, for batches in READY status get all pending items x at a time then mark batch as complete 
 
 ## Optimization Actions
+- [ ] Change the enums in the tables from string to int
 - [ ] Add index on stage record around batch and client account
 - [ ] Add indexes around master record (a) SCD + ref + client (b) ?
 - [ ] Multiple threads for concurrent file processing

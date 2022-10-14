@@ -1,8 +1,9 @@
 from datetime import datetime
 from pydantic import BaseModel
 from typing import Optional
-from src.application.models.term import Term
+from src.application.models.process_action import ProcessAction
 from src.application.models.process_status import ProcessStatus
+from src.application.models.term import Term
 
 class StageRecord(BaseModel):
     id: int
@@ -13,6 +14,7 @@ class StageRecord(BaseModel):
     amount: Optional[float]
     term: Optional[Term]
     process_status: ProcessStatus = ProcessStatus.Unprocessed
+    process_action: ProcessAction = ProcessAction.Unknown
     batch_id: int
 
     class Config:

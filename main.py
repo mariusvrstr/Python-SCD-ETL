@@ -2,14 +2,20 @@ from datetime import datetime
 from doctest import master
 import os
 import glob
-from src.application.models.process_status import ProcessStatus
-from src.application.models.stage_record import StageRecord
+
+#from src.application.models.process_status import ProcessStatus
+#from src.application.models.stage_record import StageRecord
+#from src.data_access.database.master_repository import MasterRepository
+#from src.data_access.database.stage_repository import StageRepository
+#from src.application.models.batch_status import BatchStatus
+
 from src.data_access.database.common.database import get_db_Session, engine
 from src.application.services.file_processing_service import FileProcessingService
+from src.application.services.scd_service import SCDService
 from src.application.models.batch_status import BatchStatus
-from src.data_access.database.master_repository import MasterRepository
+
 from src.data_access.database.models import database_models
-from src.data_access.database.stage_repository import StageRepository
+
 
 def etl_to_stage():
 
@@ -55,57 +61,13 @@ def etl_to_stage():
         print(f"Oops! {ex.__class__} occurred. Details: {ex}")
 
 
-def process_ready_batched():
-    context = get_db_Session()   
-    
+def process_ready_batched():   
     try:
-        stage_repo = StageRepository(context)
-        master_repo = MasterRepository(context)
-        batches = stage_repo.get_ready_batches()
+      context = get_db_Session()
+      service = SCDService(context)
 
-        for batch in batches:
-            
-            try:
-                client_account = master_repo.get_client_account(batch.client_account)
-                if (client_account is None):
-                    client_account = master_repo.add_client_account(batch.client_account)
-                    context.commit()
+      service.process_staged_records()
 
-                stage_records = stage_repo.get_batched_stage_records(batch.id, ProcessStatus.Unprocessed, 5)
-
-                while len(stage_records) > 0:
-                    context = get_db_Session()
-                    stage_repo = StageRepository(context)
-                    master_repo = MasterRepository(context)
-
-                    while len(stage_records) > 0:
-                        record = stage_records.pop()
-
-                        try:
-                            print(f'SCD THE STAGE RECORD ID [{record.id}]/ BATC [{batch.id}]')
-                            # Should this be in a seperate indipendant contex?
-                            master_repo.add_master_record(record, client_account.id)
-                            stage_repo.complete_stage_record_process(record.id, ProcessStatus.Processed)
-
-                        except Exception as ex:
-                            # If one record fails it should not impact others from processing
-                            print(f"Oops! {ex.__class__} occurred. Details: {ex}")
-                            stage_repo.complete_stage_record_process(record.id, ProcessStatus.Failed)
-
-                    context.commit()
-                    stage_records = stage_repo.get_batched_stage_records(batch.id, ProcessStatus.Unprocessed, 5)   
-
-                stage_repo.complete_batch_process(batch.id)
-                context.commit()
-
-            except Exception as ex:
-                # If one batch fails it should not impact others from processing
-                print(f"Oops! {ex.__class__} occurred. Details: {ex}")
-                context.rollback()
-         
-            finally:
-                context.close()
-     
     except Exception as ex:
         print(f"Oops! {ex.__class__} occurred. Details: {ex}")
 

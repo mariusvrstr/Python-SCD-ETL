@@ -5,8 +5,8 @@ from src.application.models.client_account import ClientAccount
 from src.application.models.master_record import MasterRecord
 from src.application.models.term import Term
 from src.application.models.stage_record import StageRecord
-from src.data_access.database.common.scd_action import SCDAction
 from src.data_access.database.common.repository_base import RepositoryBase
+from src.application.models.process_action import ProcessAction
 from sqlalchemy.sql import select
 from sqlalchemy import or_, and_
 
@@ -58,7 +58,7 @@ class MasterRepository(RepositoryBase):
     def add_master_record(self, stage_record: StageRecord, client_account_id) -> StageRecord:
 
         existing_record = self.get_master_record(stage_record.external_reference, client_account_id, stage_record.effective_date)
-        scd_action = None
+        process_action = ProcessAction.Unknown
 
         new_master_record = MasterRecordEntity().create(
                 stage_record.external_reference,
@@ -74,23 +74,23 @@ class MasterRepository(RepositoryBase):
             raise ValueError(f'Critical Error. Duplicate insert request attempted for external reference [{stage_record.external_reference}] and account id [{client_account_id}]. Please investigate and remove duplicate before trying to proceed.')
 
         if (existing_record is not None and self._check_for_changes(existing_record, new_master_record) == False):
-            scd_action = SCDAction.NoChanges
+            scd_action = ProcessAction.Unchanged
             existing_record.last_updated = datetime.now()
 
         if (existing_record is None):
-            scd_action = SCDAction.Add
+            scd_action = ProcessAction.Add
             new_master_record.to_date = None
             self.context.add(new_master_record)           
 
         elif (existing_record.to_date is None):
-            scd_action = SCDAction.Append
+            scd_action = ProcessAction.Append
             #TODO: Check if placeholder insert is required (More than X days have passed)
             new_master_record.from_date = stage_record.effective_date
             new_master_record.to_date = None
             existing_record.to_date = new_master_record.from_date
 
         else:
-            scd_action = SCDAction.Insert
+            scd_action = ProcessAction.Merge
             # Update previous.to_date = new_master_record.from_date
             # Update new_master_record.to_date = existing.from_date
             # self.context.add(new_master_record)  
@@ -100,4 +100,4 @@ class MasterRepository(RepositoryBase):
             self.sync(existing_record)
 
         self.sync(new_master_record)
-        return self.map(new_master_record)
+        return scd_action

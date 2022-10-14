@@ -1,6 +1,7 @@
 import ctypes
 from datetime import datetime
 from operator import and_
+from src.application.models.process_action import ProcessAction
 from src.application.models.process_status import ProcessStatus
 from src.data_access.database.models.database_models import StageRecordEntity, StageBatchEntity
 from src.application.models.stage_batch import StageBatch
@@ -73,7 +74,8 @@ class StageRepository(RepositoryBase):
         batch.batch_status = batch_status.value
         self.sync(batch)
 
-    def complete_stage_record_process(self, id, process_status: ProcessStatus):
+    def complete_stage_record_process(self, id, process_status: ProcessStatus, process_action: ProcessAction):
         record = self.context.get(StageRecordEntity, id)
         record.process_status = process_status.value
+        record.process_action = process_action.value
         self.sync(record)
