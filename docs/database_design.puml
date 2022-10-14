@@ -9,6 +9,7 @@ class StageRecord {
     amount
     term
     process_status
+    process_action
     -batch_id
 }
 
