@@ -30,13 +30,6 @@ class FileProcessingService():
         
         return h.hexdigest()
 
-    def delete_file_batch_for_file(self, file_path):
-        file_hash = self._get_file_hash(file_path)
-        batch = self.stage_repo.get_stage_batch(file_hash)
-
-        if (batch != None):
-            self.stage_repo.delete_batch(batch.id)       
-
     def process_item(self, item: FileItem, batch_id: int) -> Boolean:
         
         try:

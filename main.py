@@ -12,11 +12,8 @@ from src.data_access.database.models import database_models
 def clean_orphaned_batches(root_folder):
     processing_folder = f'{root_folder}processing\\'
     context = get_db_Session()
-    file_service = FileProcessingService(context)
 
     for file in glob.glob(f"{processing_folder}*.xlsx"):
-        file_service.delete_file_batch_for_file(file)
-
         file_name = os.path.basename(file)
         original_file_name = file_name[16:]
         
@@ -50,7 +47,7 @@ def etl_to_stage():
                 # On Failure
                 if (batch_summary.batch_status != BatchStatus.Ready):
                     raise ValueError(f'File [{file}] not successfully processed, expecting to be in Ready status but is [{batch_summary.batch_status.value}]')
-            
+
                 # Archive on Success
                 os.rename(working_file_path, f'{root_folder}archive\\{new_filename}')
                 context.commit()

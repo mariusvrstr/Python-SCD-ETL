@@ -30,13 +30,6 @@ class StageRepository(RepositoryBase):
         
         return self.map_all(records)
         
-    def delete_batch(self, batch_id):
-        #Check that status is only Error or in Progress before continueing
-        #TODO: Delete rows
-        #TODO: Delete batch
-        pass
-
-
     def get_stage_batch(self, file_hash, client_account = None) -> StageBatch:
         batch = None
 
