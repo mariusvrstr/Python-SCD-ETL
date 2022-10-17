@@ -1,7 +1,7 @@
 from pydantic import BaseModel
 from datetime import datetime
 from typing import Optional
-from src.application.models.batch_status import BatchStatus
+from src.common.models.batch_status import BatchStatus
 
 class StageBatch(BaseModel):
     id: int

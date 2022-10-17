@@ -1,9 +1,9 @@
 from datetime import datetime
 from pydantic import BaseModel
 from typing import Optional
-from src.application.models.process_action import ProcessAction
-from src.application.models.process_status import ProcessStatus
-from src.application.models.term import Term
+from src.common.models.process_action import ProcessAction
+from src.common.models.process_status import ProcessStatus
+from src.common.models.term import Term
 
 class StageRecord(BaseModel):
     id: int

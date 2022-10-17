@@ -1,6 +1,6 @@
 from datetime import datetime
 from pydantic import BaseModel
-from src.application.models.term import Term
+from src.common.models.term import Term
 from typing import Optional
 
 class MasterRecord(BaseModel):

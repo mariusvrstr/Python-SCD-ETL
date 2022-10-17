@@ -2,8 +2,8 @@ from src.data_access.database.stage_repository import StageRepository
 from src.data_access.database.master_repository import MasterRepository
 from src.data_access.database.common.database import get_db_Session, engine
 
-from src.application.models.process_status import ProcessStatus
-from src.application.models.stage_record import StageRecord
+from src.common.models.process_status import ProcessStatus
+from src.common.models.stage_record import StageRecord
 from src.data_access.database.master_repository import MasterRepository
 from src.data_access.database.stage_repository import StageRepository
 

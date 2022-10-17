@@ -8,9 +8,9 @@ from sqlalchemy.sql.schema import ForeignKey
 from sqlalchemy.sql.sqltypes import Integer, String, Float, DateTime, Boolean
 from sqlalchemy.orm import relationship
 from sqlalchemy import Column, UniqueConstraint
-from src.application.models.batch_status import BatchStatus
-from src.application.models.process_status import ProcessStatus
-from src.application.models.process_action import ProcessAction
+from src.common.models.batch_status import BatchStatus
+from src.common.models.process_status import ProcessStatus
+from src.common.models.process_action import ProcessAction
 
 class StageBatchEntity(Base):
     __tablename__ = 'StageBatch'

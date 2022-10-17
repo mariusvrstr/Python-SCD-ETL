@@ -5,11 +5,11 @@ import pandas as pd
 import os
 import hashlib
 
-from src.application.models.file_headings import FileHeadings
-from src.application.models.stage_batch import StageBatch
-from src.application.models.file_item import FileItem
+from src.common.models.file_headings import FileHeadings
+from src.common.models.stage_batch import StageBatch
+from src.common.models.file_item import FileItem
 from src.data_access.database.stage_repository import StageRepository
-from src.application.models.batch_status import BatchStatus
+from src.common.models.batch_status import BatchStatus
 
 class FileProcessingService():
     context = None

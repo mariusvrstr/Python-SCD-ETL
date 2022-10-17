@@ -1,12 +1,12 @@
 from datetime import datetime
 from sqlite3 import dbapi2
 from src.data_access.database.models.database_models import MasterRecordEntity, ClientAccountEntity
-from src.application.models.client_account import ClientAccount
-from src.application.models.master_record import MasterRecord
-from src.application.models.term import Term
-from src.application.models.stage_record import StageRecord
+from src.common.models.client_account import ClientAccount
+from src.common.models.master_record import MasterRecord
+from src.common.models.term import Term
+from src.common.models.stage_record import StageRecord
 from src.data_access.database.common.repository_base import RepositoryBase
-from src.application.models.process_action import ProcessAction
+from src.common.models.process_action import ProcessAction
 from sqlalchemy.sql import select
 from sqlalchemy import or_, and_
 

@@ -6,7 +6,7 @@ import glob
 from src.data_access.database.common.database import get_db_Session, engine
 from src.application.services.file_processing_service import FileProcessingService
 from src.application.services.scd_service import SCDService
-from src.application.models.batch_status import BatchStatus
+from src.common.models.batch_status import BatchStatus
 from src.data_access.database.models import database_models
 
 def clean_orphaned_batches(root_folder):

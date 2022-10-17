@@ -1,5 +1,5 @@
 from unicodedata import decimal
-from src.application.models.term import Term
+from src.common.models.term import Term
 
 class FileItem():
     effective_date = None
