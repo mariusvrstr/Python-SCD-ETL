@@ -3,7 +3,7 @@ A python example of reading and processing excel files into SCD table
 
 ### Conceptual Architecture
 
-<img src="https://user-images.githubusercontent.com/2478826/195299688-09855829-7808-4350-bc63-40f1a02c776d.png" width="600" />
+<img src="https://user-images.githubusercontent.com/2478826/196218554-54c2c02e-a3ff-476f-ae26-edc9f61e17f2.png" width="800" />
 
 ### Overview
 File Template
