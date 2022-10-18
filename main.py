@@ -31,7 +31,7 @@ def etl_to_stage():
 
         clean_orphaned_batches(root_folder)
         
-        for file in glob.glob(f"{root_folder}*.xlsx"):
+        for file in sorted(glob.glob(f"{root_folder}*.xlsx")):
             context = get_db_Session()
             file_service = FileProcessingService(context)
             

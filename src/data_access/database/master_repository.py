@@ -18,7 +18,7 @@ class MasterRepository(RepositoryBase):
     def _check_for_changes(self, existing_record: MasterRecordEntity, pending_record: MasterRecordEntity):
         if (existing_record.amount != pending_record.amount):
             return True
-        elif (existing_record.status != pending_record.status):
+        elif (existing_record.term != pending_record.term):
             return True
         else:
             return False
@@ -40,7 +40,7 @@ class MasterRepository(RepositoryBase):
         # get top 1 order by from_date desc where id <> current id
         pass
 
-    def get_master_record(self, external_reference, client_account_id, effective_date) -> MasterRecord:
+    def _get_master_record(self, external_reference, client_account_id, effective_date) -> MasterRecord:
             master_record = self.context.query(MasterRecordEntity).filter(
                 and_(
                     MasterRecordEntity.external_reference == external_reference,
@@ -48,16 +48,16 @@ class MasterRepository(RepositoryBase):
                     MasterRecordEntity.is_deleted == False,
                     effective_date > MasterRecordEntity.from_date,
                     or_(
-                        MasterRecordEntity.to_date is None,
+                        MasterRecordEntity.to_date == None,
                         effective_date < MasterRecordEntity.to_date)
                     )                
             ).first()
 
-            return self.map(master_record)        
+            return master_record # Must return DB object for update       
 
     def add_master_record(self, stage_record: StageRecord, client_account_id) -> StageRecord:
 
-        existing_record = self.get_master_record(stage_record.external_reference, client_account_id, stage_record.effective_date)
+        existing_record = self._get_master_record(stage_record.external_reference, client_account_id, stage_record.effective_date)
         process_action = ProcessAction.Unknown
 
         new_master_record = MasterRecordEntity().create(
@@ -76,8 +76,9 @@ class MasterRepository(RepositoryBase):
         if (existing_record is not None and self._check_for_changes(existing_record, new_master_record) == False):
             scd_action = ProcessAction.Unchanged
             existing_record.last_updated = datetime.now()
+            new_master_record = None
 
-        if (existing_record is None):
+        elif (existing_record is None):
             scd_action = ProcessAction.Add
             new_master_record.to_date = None
             self.context.add(new_master_record)           
@@ -99,5 +100,8 @@ class MasterRepository(RepositoryBase):
         if (existing_record is not None):
             self.sync(existing_record)
 
-        self.sync(new_master_record)
+        if (new_master_record !=None):
+            self.add(new_master_record)
+            self.sync(new_master_record)
+
         return scd_action

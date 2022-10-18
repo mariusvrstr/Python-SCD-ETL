@@ -18,7 +18,7 @@ class StageRepository(RepositoryBase):
 
     def get_ready_batches(self, size:int = 50) -> ctypes.Array:
         batches = self.context.query(StageBatchEntity).filter(
-            StageBatchEntity.batch_status == BatchStatus.Ready.value).limit(size).all()
+            StageBatchEntity.batch_status == BatchStatus.Ready.value).order_by(StageBatchEntity.start_date).limit(size).all()
 
         return self.map_all(batches, StageBatch)
 
