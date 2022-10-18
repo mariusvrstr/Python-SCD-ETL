@@ -31,19 +31,14 @@ class StageRepository(RepositoryBase):
         return self.map_all(records)
         
     def get_stage_batch(self, file_hash, client_account = None) -> StageBatch:
-        batch = None
-
-        #TODO: The below is ugly need time to work out filtering usually do a (var = None or column = var) that combines below
-        if (client_account is not None):
-            batch = self.context.query(StageBatchEntity).filter(
+        query = self.context.query(StageBatchEntity).filter(
                     StageBatchEntity.file_hash == file_hash,
-                    StageBatchEntity.batch_status != BatchStatus.Deleted.value,
-                    StageBatchEntity.client_account == client_account).one_or_none()
-        else: 
-            batch = self.context.query(StageBatchEntity).filter(
-                    StageBatchEntity.file_hash == file_hash,
-                    StageBatchEntity.batch_status == BatchStatus.InProgress.value).one_or_none()  
+                    StageBatchEntity.batch_status != BatchStatus.Deleted.value)
 
+        if (client_account != None):
+            query.filter(StageBatchEntity.client_account == client_account)
+
+        batch = query.one_or_none()
         return self.map(batch, StageBatch)
 
     def add_stage_batch(self, client_account, filename, file_hash):
