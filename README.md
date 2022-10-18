@@ -46,7 +46,8 @@ This is optional to view the [documentation](https://github.com/mariusvrstr/Pyth
 - [ ] Move the local file path to a remote SFTP path (Run from a cloud service without access to local HDD)
 
 ## SCD Type 2 Backlog
-- [X] Append new (latest) item to en of SCD chain 
+- [X] Add/Append new (latest) item to en of SCD chain 
+- [X] Skip (update last updated) when unchanged)
 - [ ] Soft delete one/batch of existing records in the SCD chain
 - [ ] Insert new SCD record in between 2 existing entries
 - [ ] Before item level SCD run client cleanup (a) items that has missing submissions for client gets placeholder (b) items that was missing in previous submissions amounts are zero's
